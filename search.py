@@ -201,12 +201,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     startState = problem.getStartState()
 
-    from searchAgents import manhattanHeuristic as mh
+    firstHeuristic = heuristic(startState, problem)
 
-    firstHeuristic = mh(startState, problem)
-
-     # the list saves the actions needed to reach that node
-    fringe.push((startState, [], firstHeuristic), firstHeuristic)
+     # the priority is the sum of total cost and heuristic of that state
+    fringe.push((startState, [], 0.0), firstHeuristic)
 
     while True:
 
@@ -224,11 +222,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for successor in problem.getSuccessors(u[0]):
                 preveousActions = u[1][:]
                 preveousActions.append(successor[1])
-                preveousCostAndHeuristic = u[2]
+                preveousCost = u[2]
 
-                newValue = preveousCostAndHeuristic + successor[2] + mh(u[0], problem)
+                newValue = preveousCost + successor[2] + heuristic(successor[0], problem)
 
-                fringe.push((successor[0], preveousActions, newValue), newValue) 
+                fringe.push((successor[0], preveousActions, preveousCost + successor[2]), newValue) 
 
 
 
